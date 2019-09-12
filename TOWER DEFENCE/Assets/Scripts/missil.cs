@@ -8,9 +8,12 @@ public class missil : MonoBehaviour
 
     private GameObject alvo;
 
+    [SerializeField] private int pontosDeDano;
+
     private void Start()
     {
         alvo = GameObject.Find("Inimigo");
+        AutoDestroiDepoisDeSegundos(4);
     }
     // Update is called once per frame
     void Update()
@@ -32,5 +35,24 @@ public class missil : MonoBehaviour
         Vector3 posicaoAtual = transform.position;
         Vector3 deslocamento = transform.forward * Time.deltaTime * velocidade;
         transform.position = posicaoAtual + deslocamento;
+    }
+
+    private void OnTriggerEnter(Collider elementoColidido)
+    {
+        if (elementoColidido.CompareTag("Inimigo"))
+        {
+            Destroy(this.gameObject);
+            //Destroy(elementoColidido.gameObject);
+            Inimigo inimigo = elementoColidido.GetComponent<Inimigo>();
+            inimigo.RecebeDano(pontosDeDano);
+        }
+
+    }
+    
+
+
+    private void AutoDestroiDepoisDeSegundos(float segundos)
+    {
+        Destroy(this.gameObject, segundos);
     }
 }
